@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz App</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .quiz-container {
+        background: white;
+        padding: 20px;
+        width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        margin-bottom: 10px;
+    }
+    .option {
+        margin: 8px 0;
+    }
+    button {
+        margin-top: 15px;
+        padding: 8px 12px;
+        border: none;
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "What is the capital of India?",
+        options: ["Mumbai", "New Delhi", "Chennai", "Kolkata"],
+        answer: "New Delhi"
+    },
+    {
+        question: "Which language runs in a web browser?",
+        options: ["Python", "Java", "C++", "JavaScript"],
+        answer: "JavaScript"
+    },
+    {
+        question: "What does HTML stand for?",
+        options: [
+            "Hyper Text Markup Language",
+            "High Text Machine Language",
+            "Hyperlinks Text Mark Language",
+            "Home Tool Markup Language"
+        ],
+        answer: "Hyper Text Markup Language"
+    }
+];
+
+let currentIndex = 0;
+let score = 0;
+
+function loadQuestion() {
+    const q = quizData[currentIndex];
+    document.getElementById("question").innerText = q.question;
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach(option => {
+        optionsDiv.innerHTML += `
+            <div class="option">
+                <input type="radio" name="option" value="${option}"> ${option}
+            </div>
+        `;
+    });
+}
+
+function nextQuestion() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) {
+        alert("Please select an answer");
+        return;
+    }
+
+    if (selected.value === quizData[currentIndex].answer) {
+        score++;
+    }
+
+    currentIndex++;
+
+    if (currentIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        document.querySelector(".quiz-container").innerHTML = `
+            <h2>Quiz Completed</h2>
+            <p>Your Score: ${score} / ${quizData.length}</p>
+            <button onclick="location.reload()">Restart</button>
+        `;
+    }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
